@@ -26,6 +26,12 @@ public class HttpConnectionWorkerThread extends Thread {
             inputStream = socket.getInputStream(); // allowing the server to read data sent by the client
             outputStream = socket.getOutputStream(); // allowing the server to send data back to the client
 
+            // to fetch for Request.txt
+            // int _byte;
+            // while ((_byte = inputStream.read()) >= 0){
+            //     System.out.print((char) _byte);
+            // }
+
             // TODO: we would read (not required)
 
             String html = "<html><head>Java HTTP Server<title></title></head><body><h1>This page was served using my Java HTTP Server</h1></body></html>";
