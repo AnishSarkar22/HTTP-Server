@@ -1,10 +1,14 @@
 package com.httpserver.http;
 
+import java.util.HashMap;
+import java.util.Set;
+
 public class HttpRequest extends HttpMessage {
     private HttpMethod method;
     private String requestTarget;
     private String originalHttpVersion; // literal from the request
     private HttpVersion bestCompatibleHttpVersion;
+    private HashMap<String, String> headers = new HashMap<>();
 
     HttpRequest() {
     }
@@ -23,6 +27,14 @@ public class HttpRequest extends HttpMessage {
 
     public String getOriginalHttpVersion() {
         return originalHttpVersion;
+    }
+
+    public Set<String> getHeaderNames() {
+        return headers.keySet();
+    }
+
+    public String getHeader(String headerName) {
+        return headers.get(headerName.toLowerCase());
     }
 
     void setMethod(String methodName) throws HttpParsingException {
@@ -53,5 +65,9 @@ public class HttpRequest extends HttpMessage {
                 HttpStatusCode.SERVER_ERROR_505_HTTP_VERSION_NOT_SUPPORTED
             );
         }
+    }
+
+    void addHeader(String headerName, String headerField) {
+        headers.put(headerName.toLowerCase(), headerField);
     }
 }
