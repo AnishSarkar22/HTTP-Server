@@ -16,7 +16,14 @@ public class HttpParser {
     private static final int LF = 0x0A; // corresponds to 10
 
     public HttpRequest parseHttpRequest(InputStream inputStream) throws HttpParsingException {
-        InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.US_ASCII); // InputStreamReader: converts bytes from the InputStream into characters, making it easier to read lines and parse text (like HTTP requests)
+        InputStreamReader reader = new InputStreamReader(inputStream, StandardCharsets.US_ASCII); // InputStreamReader:
+                                                                                                  // converts bytes from
+                                                                                                  // the InputStream
+                                                                                                  // into characters,
+                                                                                                  // making it easier to
+                                                                                                  // read lines and
+                                                                                                  // parse text (like
+                                                                                                  // HTTP requests)
 
         HttpRequest request = new HttpRequest();
 
@@ -31,7 +38,8 @@ public class HttpParser {
         return request;
     }
 
-    private void parseRequestLine(InputStreamReader reader, HttpRequest request) throws IOException, HttpParsingException {
+    private void parseRequestLine(InputStreamReader reader, HttpRequest request)
+            throws IOException, HttpParsingException {
         StringBuilder processingDataBuffer = new StringBuilder();
 
         boolean methodParsed = false;
@@ -45,9 +53,15 @@ public class HttpParser {
 
                     LOGGER.debug("Request Line VERSION to Process : {}", processingDataBuffer.toString());
 
-                    // This check ensures that if the request line is empty or missing required parts (method or target),
+                    // This check ensures that if the request line is empty or missing required parts (method or target), 
                     // the parser throws a 400 Bad Request error, which is validated by the parseHttpEmptyRequestLine test case.
                     if (!methodParsed || !requestTargetParsed) {
+                        throw new HttpParsingException(HttpStatusCode.CLIENT_ERROR_400_BAD_REQUEST);
+                    }
+
+                    try {
+                        request.setHttpVersion(processingDataBuffer.toString());
+                    } catch (BaddHttpVersionException e) {
                         throw new HttpParsingException(HttpStatusCode.CLIENT_ERROR_400_BAD_REQUEST);
                     }
                     return;
@@ -72,7 +86,7 @@ public class HttpParser {
             } else {
                 processingDataBuffer.append((char) _byte);
                 if (!methodParsed) {
-                    if (processingDataBuffer.length() >  HttpMethod.MAX_LENGTH) {
+                    if (processingDataBuffer.length() > HttpMethod.MAX_LENGTH) {
                         throw new HttpParsingException(HttpStatusCode.SERVER_ERROR_501_NOT_IMPLEMENTED);
                     }
                 }
