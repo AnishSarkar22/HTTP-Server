@@ -25,7 +25,7 @@ public class WebRootHandlerTest {
         webRootHandler = new WebRootHandler("WebRoot");
         Class<WebRootHandler> cls = WebRootHandler.class;
 
-        checkIfEndsWithSlashMethod = cls.getDeclaredMethod("CheckIfEndsWithSlash", String.class);
+        checkIfEndsWithSlashMethod = cls.getDeclaredMethod("checkIfEndsWithSlash", String.class);
         checkIfEndsWithSlashMethod.setAccessible(true);
 
         checkIfProvidedRelativePathExistsMethod = cls.getDeclaredMethod("checkIfProvidedRelativePathExists",

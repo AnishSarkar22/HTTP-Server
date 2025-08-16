@@ -16,7 +16,7 @@ public class WebRootHandler {
         }
     }
 
-    private boolean CheckIfEndsWithSlash(String relativePath) {
+    private boolean checkIfEndsWithSlash(String relativePath) {
         return relativePath.endsWith("/");
     }
 
@@ -44,7 +44,7 @@ public class WebRootHandler {
     }
 
     public String getFileMimeType(String relativePath) throws FileNotFoundException {
-        if (CheckIfEndsWithSlash(relativePath)) {
+        if (checkIfEndsWithSlash(relativePath)) {
             relativePath += "index.html"; // By default server the index.html, if it exists
         }
 
@@ -74,7 +74,7 @@ public class WebRootHandler {
      * @throws ReadFileException if there was a problem reading the file
      */
     public byte[] getFileByteArrayData(String relativePath) throws FileNotFoundException, ReadFileException {
-        if (CheckIfEndsWithSlash(relativePath)) {
+        if (checkIfEndsWithSlash(relativePath)) {
             relativePath += "index.html"; // by default serves index.html, if it exists
         }
 
