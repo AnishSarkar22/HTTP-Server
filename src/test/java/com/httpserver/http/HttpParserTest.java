@@ -1,6 +1,7 @@
 package com.httpserver.http;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
@@ -33,8 +34,9 @@ public class HttpParserTest {
             fail(e); // Fail the test if an exception is thrown during parsing of a valid request
 
         }
-
+        assertNotNull(request);
         assertEquals(request.getMethod(), HttpMethod.GET);
+        assertEquals(request.getRequestTarget(), "/");
     }
 
     // For testing invalid input stream
