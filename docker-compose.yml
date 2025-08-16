@@ -1,0 +1,49 @@
+services:
+  httpserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: java-httpserver
+    ports:
+      - "8080:8080"
+    environment:
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    volumes:
+      - ./WebRoot:/app/WebRoot:ro
+    networks:
+      - httpserver-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  nginx:
+    image: nginx:alpine
+    container_name: httpserver-nginx
+    ports:
+      - "80:80"
+      # Uncomment the below section if SSL certificates are to be added
+      # - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      # Uncomment the below section if SSL certificates are to be added
+      # - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      httpserver:
+        condition: service_healthy
+    networks:
+      - httpserver-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  httpserver-network:
+    driver: bridge

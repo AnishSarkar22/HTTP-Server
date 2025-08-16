@@ -94,6 +94,11 @@ public class HttpConnectionWorkerThread extends Thread {
         String response = "HTTP/1.1 " + statusCode + " " + statusMessage + CRLF +
                 "Content-Type: " + contentType + CRLF +
                 "Content-Length: " + content.length + CRLF +
+                // Add CORS headers
+                "Access-Control-Allow-Origin: *" + CRLF +
+                "Access-Control-Allow-Methods: GET, HEAD, OPTIONS" + CRLF +
+                "Access-Control-Allow-Headers: Content-Type, Authorization" + CRLF +
+                "Access-Control-Max-Age: 3600" + CRLF +
                 CRLF;
 
         outputStream.write(response.getBytes());
